@@ -32,6 +32,10 @@ public class HttpProcessor implements Runnable {
 		this.connector=connector;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 * 线程运行
+	 */
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub

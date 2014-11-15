@@ -88,7 +88,7 @@ public class HttpConnector implements Runnable,IConnector,Lifecycle {
 	}
 	
 	/**
-	 * 初始化处理器池
+	 * 初始化处理器池，按照处理器最小值来初始化
 	 */
 	private void initHttpProcessorStack(){
 		if(processorsPool==null){
