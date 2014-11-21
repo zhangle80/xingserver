@@ -6,17 +6,15 @@ import java.net.Socket;
 
 import javax.servlet.ServletException;
 
-import com.xing.handle.AbstractProcessor;
-import com.xing.handle.ServletProcessor;
-import com.xing.handle.StaticResourceProcessor;
 import com.xing.http.connector.HttpConnector;
 import com.xing.http.connector.SocketInputStream;
+import com.xing.server.Lifecycle;
 
 /**
  * @author Leo
  * Http处理类，处理Connector接收到的客户端Socket请求
  */
-public class HttpProcessor implements Runnable {
+public class HttpProcessor implements Runnable,Lifecycle {
 	private HttpConnector connector;
 	private HttpRequest request;
 	private HttpResponse response;
@@ -27,6 +25,8 @@ public class HttpProcessor implements Runnable {
 	
 	private Socket socket;
 	private boolean available=false;
+	
+	private long processorId;
 	
 	public HttpProcessor(HttpConnector connector){
 		this.connector=connector;
@@ -65,6 +65,7 @@ public class HttpProcessor implements Runnable {
 		this.socket=socket;
 		this.available=true;
 		notifyAll();
+		System.out.println("I am process,i'm be assigned,and my pid is "+this.getProcessorId());
 	}
 	
 	private synchronized Socket await() {
@@ -85,6 +86,10 @@ public class HttpProcessor implements Runnable {
 		return socket;
 	}
 
+	/**
+	 * 实际的处理函数
+	 * @param socket
+	 */
 	private void process(Socket socket){
 		if(socket==null){
 			return;
@@ -96,9 +101,13 @@ public class HttpProcessor implements Runnable {
 			input=new SocketInputStream(socket.getInputStream(),2048);
 			output=socket.getOutputStream();
 			
+			Thread.sleep(5000);
 			this.handleAccept(input, output);
 			socket.close();	
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
 			System.out.println("this link socket is over...");
@@ -130,14 +139,25 @@ public class HttpProcessor implements Runnable {
 			return;
 		}
 			
-		AbstractProcessor processor;
-		if(uri.startsWith("/servlet/")){
-			processor=new ServletProcessor(this.request,this.response);
-		}else{
-			processor=new StaticResourceProcessor(this.request,this.response);
-		}
-		processor.process();
+		this.connector.getContainer().invoke(request, response);
 	}
 
+	@Override
+	public void initialize() {
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		Thread processorThread=new Thread(this);
+		processorThread.start();
+		this.processorId=processorThread.getId();
+		System.out.println("I am a processor,now i'm be created and my pid is "+this.processorId);
+	}
+
+	public long getProcessorId(){
+		return this.processorId;
+	}
 }

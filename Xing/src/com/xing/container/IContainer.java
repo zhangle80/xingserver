@@ -1,5 +1,8 @@
 package com.xing.container;
 
-public interface IContainer {
+import com.xing.http.HttpRequest;
+import com.xing.http.HttpResponse;
 
+public interface IContainer {
+	public void invoke(HttpRequest request, HttpResponse response);
 }

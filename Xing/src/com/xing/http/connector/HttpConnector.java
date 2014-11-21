@@ -24,6 +24,7 @@ public class HttpConnector implements Runnable,IConnector,Lifecycle {
 	boolean termination;			//是否结束
 	private Stack<HttpProcessor> processorsPool;
 	private int curProcessors=0;
+	private IContainer container;
 	
 	public void setTermination(boolean termination){
 		this.termination=termination;
@@ -79,12 +80,12 @@ public class HttpConnector implements Runnable,IConnector,Lifecycle {
 	}
 	@Override
 	public IContainer getContainer() {
-		return null;
+		return this.container;
 	}
 	@Override
 	public void setContainer(IContainer container) {
 		// TODO Auto-generated method stub
-		
+		this.container=container;
 	}
 	
 	/**
@@ -102,21 +103,39 @@ public class HttpConnector implements Runnable,IConnector,Lifecycle {
 			recycle(processor);
 		}
 	}
+	/**
+	 * 循环利用
+	 * @param processor
+	 */
 	public void recycle(HttpProcessor processor) {
 		this.processorsPool.push(processor);
+		System.out.println("I am be recycled,and i'm is "+processor.getProcessorId());
+		System.out.println("current pool has "+this.processorsPool.size()+" processors");
 	}
+	/**
+	 * 生成新处理器
+	 * @return
+	 */
 	private HttpProcessor newProcessor() {
 		HttpProcessor processor=new HttpProcessor(this);
+		processor.start();		//启动线程
 		this.curProcessors+=1;
 		return processor;
 	}
 
+	/**
+	 * 分配处理器
+	 * @return
+	 */
 	private HttpProcessor dispatchProcessor(){
 		HttpProcessor processor;
 		processor=this.processorsPool.pop();
+		
+		System.out.println("I am be dispatch,and i'm is "+processor.getProcessorId());
+		System.out.println("current pool has "+this.processorsPool.size()+" processors");
+		
 		if(processor==null&&this.curProcessors<Constants.MAX_PROCESSORS){
 			processor=newProcessor();
-			recycle(processor);
 		}
 		return processor;
 	}
