@@ -69,7 +69,6 @@ public class HttpProcessor implements Runnable,Lifecycle {
 	}
 	
 	private synchronized Socket await() {
-		// TODO Auto-generated method stub
 		while(!this.available){
 			try {
 				wait();
@@ -101,15 +100,19 @@ public class HttpProcessor implements Runnable,Lifecycle {
 			input=new SocketInputStream(socket.getInputStream(),2048);
 			output=socket.getOutputStream();
 			
-			Thread.sleep(5000);
+			if(!this.socketIsAvailable(socket)){//临时判断方法，未来会被Request Head中的Content-length代替
+				socket.close();
+				return;
+			}
+			
+			Thread.sleep(500);					//模拟线程运行时间
 			this.handleAccept(input, output);
 			socket.close();	
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally{
 			System.out.println("this link socket is over...");
 		}
 
@@ -159,5 +162,25 @@ public class HttpProcessor implements Runnable,Lifecycle {
 
 	public long getProcessorId(){
 		return this.processorId;
+	}
+	
+	/**
+	 * 该方法用来检查请求socket是否有效，是临时方法，将来需要被Request Head 的 Content-length是否为0取代
+	 * @param socket
+	 * @return
+	 * @throws IOException
+	 */
+	private boolean socketIsAvailable(Socket socket) throws IOException{
+		int count=0;
+		int index=0;
+		while (count == 0) { 
+		   count = socket.getInputStream().available(); 
+		   index++;
+		   if(index>100){
+			   System.out.println("this socket available check count expend 100,is null socket!");
+			   return false;
+		   }
+		}
+		return true;
 	}
 }
