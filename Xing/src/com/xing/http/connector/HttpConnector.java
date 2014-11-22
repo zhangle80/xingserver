@@ -10,7 +10,7 @@ import java.util.Stack;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.xing.container.IContainer;
+import com.xing.container.Container;
 import com.xing.http.HttpProcessor;
 import com.xing.server.Constants;
 import com.xing.server.Lifecycle;
@@ -20,11 +20,11 @@ import com.xing.server.Lifecycle;
  * HTTP链接类，启动进程处理客户端socket请求
  * 
  */
-public class HttpConnector implements Runnable,IConnector,Lifecycle {
+public class HttpConnector implements Runnable,Connector,Lifecycle {
 	boolean termination;			//是否结束
 	private Stack<HttpProcessor> processorsPool;
 	private int curProcessors=0;
-	private IContainer container;
+	private Container container;
 	
 	public void setTermination(boolean termination){
 		this.termination=termination;
@@ -79,11 +79,11 @@ public class HttpConnector implements Runnable,IConnector,Lifecycle {
 		return null;
 	}
 	@Override
-	public IContainer getContainer() {
+	public Container getContainer() {
 		return this.container;
 	}
 	@Override
-	public void setContainer(IContainer container) {
+	public void setContainer(Container container) {
 		// TODO Auto-generated method stub
 		this.container=container;
 	}

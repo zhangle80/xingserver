@@ -16,7 +16,7 @@ import com.xing.http.HttpResponse;
 import com.xing.http.HttpResponseFacade;
 import com.xing.server.Constants;
 
-public class SimpleContainer implements IContainer {
+public class SimpleContainer implements Container {
 	@Override
 	public void invoke(HttpRequest request, HttpResponse response) {
 		// TODO Auto-generated method stub
@@ -75,6 +75,26 @@ public class SimpleContainer implements IContainer {
 		}
 		
 		System.out.println("servlet process...");
+	}
+	@Override
+	public void addChild(Container child) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public Container findChild(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Container[] findChildren() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void removeChild(Container child) {
+		// TODO Auto-generated method stub
+		
 	}
 
 
