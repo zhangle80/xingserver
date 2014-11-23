@@ -1,5 +1,6 @@
 package com.xing.container;
 
+import com.xing.classloader.SimpleLoader;
 import com.xing.http.HttpRequest;
 import com.xing.http.HttpResponse;
 
@@ -14,4 +15,8 @@ public interface Container {
 	public Container findChild(String name);
 	
 	public Container[] findChildren(); 
+	
+	public SimpleLoader getLoader();
+	
+	public void setLoader(SimpleLoader loader);
 }

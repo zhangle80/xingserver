@@ -1,5 +1,9 @@
 package com.xing.pipeline;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+
 import com.xing.http.HttpRequest;
 import com.xing.http.HttpResponse;
 
@@ -40,6 +44,8 @@ public interface Pipeline {
 	 * 触发流水线方法
 	 * @param request
 	 * @param response
+	 * @throws ServletException 
+	 * @throws IOException 
 	 */
-	public void invoke(HttpRequest request, HttpResponse response);
+	public void invoke(HttpRequest request, HttpResponse response) throws ServletException, IOException;
 }

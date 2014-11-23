@@ -21,4 +21,6 @@ public interface Wrapper extends Container {
 	 * @throws javax.servlet.ServletException
 	 */
 	public void load() throws javax.servlet.ServletException;
+	
+	public void setServletClass(String servletClass);
 }

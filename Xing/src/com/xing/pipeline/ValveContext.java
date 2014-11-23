@@ -1,5 +1,9 @@
 package com.xing.pipeline;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+
 import com.xing.http.HttpRequest;
 import com.xing.http.HttpResponse;
 
@@ -15,7 +19,9 @@ public interface ValveContext {
 	 * 执行并流转到下一个阀门
 	 * @param request
 	 * @param response
+	 * @throws ServletException 
+	 * @throws IOException 
 	 */
-	public void invokeNext(HttpRequest request, HttpResponse response);
+	public void invokeNext(HttpRequest request, HttpResponse response) throws ServletException, IOException;
 
 }
