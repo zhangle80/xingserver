@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.xing.container.Container;
 import com.xing.http.HttpProcessor;
+import com.xing.lifecycle.Lifecycle;
+import com.xing.lifecycle.LifecycleListener;
 import com.xing.server.Constants;
-import com.xing.server.Lifecycle;
 
 /**
  * @author Leo
@@ -138,5 +139,25 @@ public class HttpConnector implements Runnable,Connector,Lifecycle {
 			processor=newProcessor();
 		}
 		return processor;
+	}
+	@Override
+	public void addLifecycleListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public LifecycleListener[] findLifecycleListeners() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void removeLifecycleListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
 	}
 }

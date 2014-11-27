@@ -8,7 +8,8 @@ import javax.servlet.ServletException;
 
 import com.xing.http.connector.HttpConnector;
 import com.xing.http.connector.SocketInputStream;
-import com.xing.server.Lifecycle;
+import com.xing.lifecycle.Lifecycle;
+import com.xing.lifecycle.LifecycleListener;
 
 /**
  * @author Leo
@@ -182,5 +183,29 @@ public class HttpProcessor implements Runnable,Lifecycle {
 		   }
 		}
 		return true;
+	}
+
+	@Override
+	public void addLifecycleListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public LifecycleListener[] findLifecycleListeners() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeLifecycleListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
 	}
 }
