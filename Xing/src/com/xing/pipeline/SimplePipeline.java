@@ -6,8 +6,10 @@ import javax.servlet.ServletException;
 
 import com.xing.http.HttpRequest;
 import com.xing.http.HttpResponse;
+import com.xing.lifecycle.Lifecycle;
+import com.xing.lifecycle.LifecycleListener;
 
-public class SimplePipeline implements Pipeline,ValveContext {
+public class SimplePipeline implements Pipeline,ValveContext,Lifecycle {
 	private Valve basic;
 	private Valve[] valves=new Valve[0];
 	private int stage=0;
@@ -72,6 +74,42 @@ public class SimplePipeline implements Pipeline,ValveContext {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public void addLifecycleListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public LifecycleListener[] findLifecycleListeners() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void initialize() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeLifecycleListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		System.out.println("i am simplepipeline, and i am be started!");
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		System.out.println("i am simplepipeline, and i am be stopped!");
 	}
 
 }

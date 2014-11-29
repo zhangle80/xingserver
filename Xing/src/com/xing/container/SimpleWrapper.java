@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import com.xing.classloader.SimpleLoader;
 import com.xing.http.HttpRequest;
 import com.xing.http.HttpResponse;
+import com.xing.lifecycle.Lifecycle;
+import com.xing.lifecycle.LifecycleListener;
 import com.xing.pipeline.Pipeline;
 import com.xing.pipeline.SimplePipeline;
 import com.xing.pipeline.SimpleWrapperValve;
@@ -20,7 +22,7 @@ import com.xing.pipeline.Valve;
  * @author Leo
  *
  */
-public class SimpleWrapper implements Wrapper,Pipeline {
+public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 	private SimpleLoader loader;
 	private Container parent;
 	private Pipeline pipeline=new SimplePipeline();
@@ -132,6 +134,47 @@ public class SimpleWrapper implements Wrapper,Pipeline {
 	@Override
 	public void setLoader(SimpleLoader loader) {
 		this.loader=loader;
+	}
+
+	@Override
+	public String getName() {
+		return this.servletClass;
+	}
+
+	@Override
+	public void addLifecycleListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public LifecycleListener[] findLifecycleListeners() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void initialize() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeLifecycleListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

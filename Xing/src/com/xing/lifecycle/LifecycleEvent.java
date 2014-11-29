@@ -2,6 +2,11 @@ package com.xing.lifecycle;
 
 import java.util.EventObject;
 
+/**
+ * 生命周期事件，实际是实现生命周期接口的类状态变化的事件
+ * @author Leo
+ *
+ */
 public class LifecycleEvent extends EventObject {
 	private Lifecycle lifecycle=null;
 	private String type=null;

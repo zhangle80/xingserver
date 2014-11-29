@@ -13,19 +13,22 @@ public interface Lifecycle {
 	public static final String BEFORE_STOP_EVENT = "before_stop";
 	public static final String AFTER_STOP_EVENT = "after_stop";
 	/**
-	 * 初始化
+	 * Lifecycle初始化
 	 */
 	public void initialize();
 	
 	/**
-	 * 开始
+	 * Lifecycle开始
 	 */
 	public void start();
 	
+	/**
+	 * Lifecycle结束
+	 */
 	public void stop();
 	
 	/**
-	 * 添加观察者
+	 * Lifecycle添加观察者
 	 * @param listener
 	 */
 	public void addLifecycleListener(LifecycleListener listener);

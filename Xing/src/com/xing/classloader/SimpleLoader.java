@@ -7,9 +7,11 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLStreamHandler;
 
+import com.xing.lifecycle.Lifecycle;
+import com.xing.lifecycle.LifecycleListener;
 import com.xing.server.Constants;
 
-public class SimpleLoader {
+public class SimpleLoader implements Lifecycle {
 	private URLClassLoader loader = null;  //该类加载器用于从指向 JAR文件和目录的 URL的搜索路径加载类和资源
 
 	public SimpleLoader(){
@@ -37,5 +39,41 @@ public class SimpleLoader {
 			e.printStackTrace();
 		}
 		return servletClass;
+	}
+
+	@Override
+	public void addLifecycleListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public LifecycleListener[] findLifecycleListeners() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void initialize() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeLifecycleListener(LifecycleListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		System.out.println("i am simpleload, and i am be started!");
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+		System.out.println("i am simpleload, and i am be stopped!");
 	}
 }

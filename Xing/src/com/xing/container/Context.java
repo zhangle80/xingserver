@@ -6,7 +6,7 @@ package com.xing.container;
  *
  */
 public interface Context extends Container {
-	public void addWrapper();
+	public void addWrapper(Wrapper wrapper);
 	
 	public void createWrapper();
 
