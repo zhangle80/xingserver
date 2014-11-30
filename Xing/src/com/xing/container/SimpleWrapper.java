@@ -11,6 +11,7 @@ import com.xing.http.HttpRequest;
 import com.xing.http.HttpResponse;
 import com.xing.lifecycle.Lifecycle;
 import com.xing.lifecycle.LifecycleListener;
+import com.xing.lifecycle.LifecycleSupport;
 import com.xing.pipeline.Pipeline;
 import com.xing.pipeline.SimplePipeline;
 import com.xing.pipeline.SimpleWrapperValve;
@@ -24,11 +25,15 @@ import com.xing.pipeline.Valve;
  */
 public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 	private SimpleLoader loader;
+	private LifecycleSupport lifecycleSupport;
 	private Container parent;
 	private Pipeline pipeline=new SimplePipeline();
 	private String servletClass="";
+	private boolean started=false;
+	private Servlet instance=null;
 
 	public SimpleWrapper(){
+		this.lifecycleSupport=new LifecycleSupport(this);
 		Valve valve=new SimpleWrapperValve(this);//基本阀门需要指向其所在容器，以根据容器的分配方法来获得Servlet类
 		this.pipeline.setBasic(valve);
 	}
@@ -39,10 +44,26 @@ public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 	
 	@Override
 	public Servlet allocate() throws ServletException {		
+		
 		Servlet servlet=null;
 		if(this.servletClass==null||this.servletClass.equals("")){
 			return servlet;
 		}
+		if(this.instance==null){
+			this.load();
+		}
+		servlet=this.instance;
+
+		System.out.println("servlet process...");
+		return servlet;
+	}
+
+	@Override
+	public void load() throws ServletException {
+		if(this.instance!=null){
+			return;
+		}
+		Servlet servlet=null;
 		try {
 			Class<?> servletClass=this.loader.loadClass(this.servletClass);
 			servlet =(Servlet) servletClass.newInstance();
@@ -51,15 +72,8 @@ public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} 
-		
-		System.out.println("servlet process...");
-		return servlet;
-	}
-
-	@Override
-	public void load() throws ServletException {
-		// TODO Auto-generated method stub
-
+		this.instance=servlet;
+		this.instance.init(null);//应该传入servletConfig对象
 	}
 
 	@Override
@@ -143,14 +157,12 @@ public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 
 	@Override
 	public void addLifecycleListener(LifecycleListener listener) {
-		// TODO Auto-generated method stub
-		
+		this.lifecycleSupport.addLifecycleListener(listener);
 	}
 
 	@Override
 	public LifecycleListener[] findLifecycleListeners() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.lifecycleSupport.findLifecycleListener();
 	}
 
 	@Override
@@ -161,19 +173,61 @@ public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 
 	@Override
 	public void removeLifecycleListener(LifecycleListener listener) {
-		// TODO Auto-generated method stub
-		
+		this.lifecycleSupport.removeLifecycleListener(listener);
 	}
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
+		System.out.println("Starting Wrapper "+this.servletClass);
+		if(this.started){
+			try {
+				throw new Exception("Wrapper is started");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		this.lifecycleSupport.fireLifecycleEvent(BEFORE_START_EVENT, null);
+		this.started=true;
 		
+		if(this.loader!=null&&(this.loader instanceof Lifecycle)){
+			((Lifecycle)this.loader).start();
+		}
+		
+		if(this.pipeline!=null&&(this.pipeline instanceof Lifecycle)){
+			((Lifecycle)this.pipeline).start();
+		}
+		this.lifecycleSupport.fireLifecycleEvent(START_EVENT, null);
+		this.lifecycleSupport.fireLifecycleEvent(AFTER_START_EVENT, null);
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
+		System.out.println("wrapper is stoping");
+		
+		this.instance.destroy();//清理servlet
+		this.instance=null;		//方便垃圾清理
+		
+		if(!this.started){
+			try {
+				throw new Exception("SimpleContext has not be started");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		this.started=false;
+		
+		this.lifecycleSupport.fireLifecycleEvent(BEFORE_STOP_EVENT, null);
+		this.lifecycleSupport.fireLifecycleEvent(STOP_EVENT, null);
+		
+		if(this.pipeline!=null&&(this.pipeline instanceof Lifecycle)){
+			((Lifecycle)this.pipeline).stop();
+		}
+		
+		if(this.loader!=null&&(this.loader instanceof Lifecycle)){
+			((Lifecycle)this.loader).stop();
+		}
+		
+		this.lifecycleSupport.fireLifecycleEvent(AFTER_STOP_EVENT, null);
 		
 	}
 
