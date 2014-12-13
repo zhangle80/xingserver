@@ -10,6 +10,7 @@ import com.xing.http.HttpResponse;
 import com.xing.lifecycle.Lifecycle;
 import com.xing.lifecycle.LifecycleListener;
 import com.xing.lifecycle.LifecycleSupport;
+import com.xing.logger.Logger;
 import com.xing.pipeline.Pipeline;
 import com.xing.pipeline.SimpleContextValve;
 import com.xing.pipeline.SimplePipeline;
@@ -23,6 +24,7 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 	private Pipeline pipeline=new SimplePipeline();
 	private Container parent;
 	private boolean started=false;
+	private Logger logger;
 	
 	public SimpleContext(){
 		this.lifecycleSupport=new LifecycleSupport(this);
@@ -149,6 +151,7 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 		}
 		this.lifecycleSupport.fireLifecycleEvent(START_EVENT, null);
 		this.lifecycleSupport.fireLifecycleEvent(AFTER_START_EVENT, null);
+		this.logger.log("context is start!");
 	}
 
 	@Override
@@ -204,6 +207,16 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 	@Override
 	public void setBasic(Valve valve) {
 		this.pipeline.setBasic(valve);
+	}
+
+	@Override
+	public void setLog(Logger logger) {
+		this.logger=logger;
+	}
+
+	@Override
+	public Logger getLog() {
+		return this.logger;
 	}
 
 }

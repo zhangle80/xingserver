@@ -6,9 +6,11 @@ import com.xing.container.SimpleContext;
 import com.xing.container.SimpleContextLifecycleListener;
 import com.xing.container.SimpleWrapper;
 import com.xing.container.Wrapper;
+import com.xing.http.connector.Connector;
 import com.xing.http.connector.HttpConnector;
 import com.xing.lifecycle.Lifecycle;
 import com.xing.lifecycle.LifecycleListener;
+import com.xing.logger.FileLogger;
 import com.xing.pipeline.Pipeline;
 import com.xing.pipeline.RequestDateTimeValve;
 import com.xing.pipeline.Valve;
@@ -20,13 +22,20 @@ public final class Bootstrap {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("Hello everyone, Xing server is starting...");
-		HttpConnector httpConnector=new HttpConnector();
+		System.setProperty("xing.base.logger", System.getProperty("user.dir"));
+		FileLogger logger=new FileLogger("");
+		logger.setPrefix("FileLog_");
+		logger.setSuffix(".txt");
+		logger.setTimestamp(true);
+		
+		logger.log("Hello everyone, Xing server is starting...");
+		Connector connector=new HttpConnector();
 		
 		Context context = new SimpleContext();
+		context.setLog(logger);
 		LifecycleListener listener = new SimpleContextLifecycleListener();
 		((Lifecycle)context).addLifecycleListener(listener);
-		
+				
 		Wrapper wrapper=new SimpleWrapper();
 		wrapper.setServletClass("ThirdServlet");
 		
@@ -39,8 +48,8 @@ public final class Bootstrap {
 		context.addWrapper(wrapper);
 		((Lifecycle)context).start();
 		
-		httpConnector.setContainer(context);
-		httpConnector.start();
+		connector.setContainer(context);
+		((Lifecycle)connector).start();		
 	}
 
 }

@@ -8,7 +8,7 @@ public class SimpleContextLifecycleListener implements LifecycleListener {
 
 	@Override
 	public void lifecycleEvent(LifecycleEvent event) {
-		System.out.println("SimpleCotextLifecycleListener event is"+event.getType());
+		System.out.println("SimpleCotextLifecycleListener event is "+event.getType());
 		if(Lifecycle.START_EVENT.equals(event.getType())){
 			System.out.println("Starting context");
 		}
