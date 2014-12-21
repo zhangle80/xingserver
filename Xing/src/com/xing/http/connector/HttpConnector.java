@@ -125,7 +125,7 @@ public class HttpConnector implements Runnable,Connector,Lifecycle {
 	}
 
 	/**
-	 * 分配处理器
+	 * 分配处理器,WEB容器实现多线程的地方，每到一个请求就分配一个处理线程
 	 * @return
 	 */
 	private HttpProcessor dispatchProcessor(){
