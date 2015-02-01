@@ -25,6 +25,8 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 	private Container parent;
 	private boolean started=false;
 	private Logger logger;
+	private String path;
+	private String docBase;
 	
 	public SimpleContext(){
 		this.lifecycleSupport=new LifecycleSupport(this);
@@ -217,6 +219,24 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 	@Override
 	public Logger getLog() {
 		return this.logger;
+	}
+
+	@Override
+	public void reload() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDocBase(String docBase) {
+		// TODO Auto-generated method stub
+		this.docBase=docBase;
+	}
+
+	@Override
+	public void setPath(String path) {
+		// TODO Auto-generated method stub
+		this.path=path;
 	}
 
 }

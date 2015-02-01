@@ -15,5 +15,11 @@ public interface Context extends Container {
 	public void setLog(Logger logger);
 	
 	public Logger getLog();
+	
+	public void reload();
+	
+	public void setPath(String path);
+	
+	public void setDocBase(String docBase);
 
 }
