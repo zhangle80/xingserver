@@ -41,4 +41,6 @@ public interface Container {
 	public SimpleLoader getLoader();
 	
 	public void setLoader(SimpleLoader loader);
+	
+	public void setParent(Container parent);
 }

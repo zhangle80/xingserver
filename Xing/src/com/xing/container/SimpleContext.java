@@ -37,6 +37,7 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 	@Override
 	public void addWrapper(Wrapper wrapper) {
 		this.addChild(wrapper);
+		wrapper.setParent(this);
 	}
 
 	@Override
@@ -237,6 +238,19 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 	public void setPath(String path) {
 		// TODO Auto-generated method stub
 		this.path=path;
+	}
+
+	@Override
+	public void setParent(Container parent) {
+		this.parent=parent;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public String getDocBase() {
+		return docBase;
 	}
 
 }

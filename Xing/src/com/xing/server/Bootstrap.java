@@ -35,16 +35,16 @@ public final class Bootstrap {
 		context.setLog(logger);
 		LifecycleListener listener = new SimpleContextLifecycleListener();
 		((Lifecycle)context).addLifecycleListener(listener);
+		
+		SimpleLoader loader=new SimpleLoader();
+		context.setLoader(loader);
 				
 		Wrapper wrapper=new SimpleWrapper();
 		wrapper.setServletClass("ThirdServlet");
 		
 		Valve requestDateTimeValve=new RequestDateTimeValve();
 		((Pipeline)wrapper).addValve(requestDateTimeValve);
-		
-		SimpleLoader loader=new SimpleLoader();
-		wrapper.setLoader(loader);
-		
+			
 		context.addWrapper(wrapper);
 		((Lifecycle)context).start();
 		

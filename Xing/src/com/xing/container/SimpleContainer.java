@@ -80,6 +80,11 @@ public class SimpleContainer implements Container {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void setParent(Container parent) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

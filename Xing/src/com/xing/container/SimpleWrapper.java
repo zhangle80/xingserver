@@ -65,7 +65,7 @@ public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 		}
 		Servlet servlet=null;
 		try {
-			Class<?> servletClass=this.loader.loadClass(this.servletClass);
+			Class<?> servletClass=this.getLoader().loadClass(this.servletClass);
 			servlet =(Servlet) servletClass.newInstance();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
@@ -229,6 +229,11 @@ public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 		
 		this.lifecycleSupport.fireLifecycleEvent(AFTER_STOP_EVENT, null);
 		
+	}
+
+	@Override
+	public void setParent(Container parent) {
+		this.parent=parent;
 	}
 
 }
