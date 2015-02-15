@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 
-import com.xing.classloader.SimpleLoader;
+import com.xing.classloader.Loader;
 import com.xing.http.HttpRequest;
 import com.xing.http.HttpResponse;
 import com.xing.lifecycle.Lifecycle;
@@ -20,7 +20,7 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 
 	private Container[] children=new Container[0];
 	private LifecycleSupport lifecycleSupport;
-	private SimpleLoader loader; 
+	private Loader loader; 
 	private Pipeline pipeline=new SimplePipeline();
 	private Container parent;
 	private boolean started=false;
@@ -74,7 +74,7 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 	}
 
 	@Override
-	public SimpleLoader getLoader() {
+	public Loader getLoader() {
 		if(loader!=null){
 			return loader;
 		}
@@ -102,7 +102,7 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 	}
 
 	@Override
-	public void setLoader(SimpleLoader loader) {
+	public void setLoader(Loader loader) {
 		this.loader=loader;
 	}
 

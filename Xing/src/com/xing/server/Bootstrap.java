@@ -1,6 +1,7 @@
 package com.xing.server;
 
-import com.xing.classloader.SimpleLoader;
+import com.xing.classloader.Loader;
+import com.xing.classloader.WebAppLoader;
 import com.xing.container.Context;
 import com.xing.container.SimpleContext;
 import com.xing.container.SimpleContextLifecycleListener;
@@ -36,7 +37,7 @@ public final class Bootstrap {
 		LifecycleListener listener = new SimpleContextLifecycleListener();
 		((Lifecycle)context).addLifecycleListener(listener);
 		
-		SimpleLoader loader=new SimpleLoader();
+		Loader loader=new WebAppLoader();
 		context.setLoader(loader);
 				
 		Wrapper wrapper=new SimpleWrapper();

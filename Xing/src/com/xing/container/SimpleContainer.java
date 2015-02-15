@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
+import com.xing.classloader.Loader;
 import com.xing.classloader.SimpleLoader;
 import com.xing.http.HttpRequest;
 import com.xing.http.HttpRequestFacade;
@@ -71,12 +72,12 @@ public class SimpleContainer implements Container {
 		
 	}
 	@Override
-	public SimpleLoader getLoader() {
+	public Loader getLoader() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
-	public void setLoader(SimpleLoader loader) {
+	public void setLoader(Loader loader) {
 		// TODO Auto-generated method stub
 		
 	}

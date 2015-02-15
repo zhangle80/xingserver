@@ -20,13 +20,16 @@ public class WebAppLoader implements Loader, Lifecycle, Runnable {
 	/**
 	 * 类加载器的路径名称，默认指向WebAppClassLoader
 	 */
-	private String loaderClass;
+	private String loaderClass="com.xing.classloader.WebappClassLoader";;
 	private ClassLoader parentClassLoader;
+	private ClassLoader classLoader;
 	
 	private boolean threadDone=false;
 	private boolean started=false;
 	
 	private String[] repository=new String[0];
+	
+	private Logger logger = new SystemOutLogger();
 
 	public String getLoaderClass() {
 		return loaderClass;
@@ -85,7 +88,7 @@ public class WebAppLoader implements Loader, Lifecycle, Runnable {
 	@Override
 	public ClassLoader getClassLoader() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.classLoader;
 	}
 
 	@Override
@@ -179,11 +182,25 @@ public class WebAppLoader implements Loader, Lifecycle, Runnable {
 	}
 
 	@Override
-	public void start() {
+	public void start(){
 		// TODO Auto-generated method stub
 		//Creating a class loader 
+        if (started){
+            try {
+				throw new Exception("webappLoader.alreadyStarted");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        }
+        logger.log("webappLoader.starting");
+		this.started = true;
+		
 		try {
-			this.createClassLoader();
+			this.classLoader=this.createClassLoader();
+			
+            if (classLoader instanceof Lifecycle){
+                ((Lifecycle) classLoader).start();
+            }
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {

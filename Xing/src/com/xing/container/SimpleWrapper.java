@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 
-import com.xing.classloader.SimpleLoader;
+import com.xing.classloader.Loader;
 import com.xing.http.HttpRequest;
 import com.xing.http.HttpResponse;
 import com.xing.lifecycle.Lifecycle;
@@ -24,7 +24,7 @@ import com.xing.pipeline.Valve;
  *
  */
 public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
-	private SimpleLoader loader;
+	private Loader loader;
 	private LifecycleSupport lifecycleSupport;
 	private Container parent;
 	private Pipeline pipeline=new SimplePipeline();
@@ -65,11 +65,13 @@ public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 		}
 		Servlet servlet=null;
 		try {
-			Class<?> servletClass=this.getLoader().loadClass(this.servletClass);
+			Class<?> servletClass=this.getLoader().getClassLoader().loadClass(this.servletClass);
 			servlet =(Servlet) servletClass.newInstance();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} 
 		this.instance=servlet;
@@ -110,7 +112,7 @@ public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 	}
 	
 	@Override
-	public SimpleLoader getLoader(){
+	public Loader getLoader(){
 		if(loader!=null){
 			return loader;
 		}
@@ -146,7 +148,7 @@ public class SimpleWrapper implements Wrapper,Pipeline,Lifecycle {
 	}
 
 	@Override
-	public void setLoader(SimpleLoader loader) {
+	public void setLoader(Loader loader) {
 		this.loader=loader;
 	}
 
