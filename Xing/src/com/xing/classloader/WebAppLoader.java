@@ -27,10 +27,14 @@ public class WebAppLoader implements Loader, Lifecycle, Runnable {
 	private boolean threadDone=false;
 	private boolean started=false;
 	
-	private String[] repository=new String[0];
+	private String[] repositories=new String[0];
 	
 	private Logger logger = new SystemOutLogger();
-
+	/**
+	 * 是否委托给父加载器加载
+	 */
+	private boolean delegate=false;
+	
 	public String getLoaderClass() {
 		return loaderClass;
 	}
@@ -63,6 +67,13 @@ public class WebAppLoader implements Loader, Lifecycle, Runnable {
 			classLoader =(WebappClassLoader)constructor.newInstance(arg);
 		}
 		
+		if(classLoader!=null){
+	        classLoader.setDelegate(this.delegate);
+	        for (int i = 0; i < repositories.length; i++) {
+	            classLoader.addRepository(repositories[i]);
+	        }
+		}
+		
 		return classLoader;
 	}
 
@@ -74,15 +85,15 @@ public class WebAppLoader implements Loader, Lifecycle, Runnable {
 
 	@Override
 	public void addRepository(String repository) {
-		String[] temp=new String[this.repository.length+1];
-		System.arraycopy(this.repository, 0, temp, 0, this.repository.length);
-		temp[this.repository.length]=repository;
-		this.repository=temp;
+		String[] temp=new String[this.repositories.length+1];
+		System.arraycopy(this.repositories, 0, temp, 0, this.repositories.length);
+		temp[this.repositories.length]=repository;
+		this.repositories=temp;
 	}
 
 	@Override
 	public String[] findRepositories() {
-		return this.repository;
+		return this.repositories;
 	}
 
 	@Override
@@ -197,7 +208,7 @@ public class WebAppLoader implements Loader, Lifecycle, Runnable {
 		
 		try {
 			this.classLoader=this.createClassLoader();
-			
+            
             if (classLoader instanceof Lifecycle){
                 ((Lifecycle) classLoader).start();
             }

@@ -35,7 +35,9 @@ public class SimpleContextValve implements Valve {
 			ValveContext valveContext) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Container context=this.getContainer();	//找到其容器
-		Container wrapper = ((SimpleContext)context).findChild("ThirdServlet");//根据名称找到相关子容器（包装类）
+		String uri=request.getRequestURI();
+		String servlet=uri.substring(1);
+		Container wrapper = ((SimpleContext)context).findChild(servlet);//根据名称找到相关子容器（包装类）
 		
 		wrapper.invoke(request, response);		//触发器
 	}

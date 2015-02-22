@@ -22,9 +22,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+
+import com.xing.container.Context;
 import com.xing.http.connector.HttpRequestLine;
 
 import com.xing.http.connector.SocketInputStream;
+import com.xing.session.Manager;
+import com.xing.session.Session;
 
 public class HttpRequest implements HttpServletRequest {
 	
@@ -32,6 +36,9 @@ public class HttpRequest implements HttpServletRequest {
 	private String requestURI;
 	private String queryString;
 	private String requestedSessionId;
+	
+	private Context context;
+	private Session session;
 	/**
 	 * sessionIDÊÇ·ñÀ´×ÔURL
 	 */
@@ -264,16 +271,54 @@ public class HttpRequest implements HttpServletRequest {
 
 	@Override
 	public HttpSession getSession() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getSession(true);
 	}
 
 	@Override
 	public HttpSession getSession(boolean arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.doGetSession();
 	}
 
+	private HttpSession doGetSession(){
+		if(this.context==null){
+			return null;
+		}
+		if((this.session!=null)&&!session.isValid()){
+			this.session = null;
+		}
+		if(this.session!=null){
+			return this.session.getSession();
+		}
+		
+		Manager manager=null;
+		
+		if(this.context!=null){
+			manager = this.context.getManager();
+		}
+		
+		if(manager==null){
+			return null;
+		}
+		
+		if(this.requestedSessionId!=null){
+			this.session=manager.findSession(this.requestedSessionId);
+			
+			if(this.session!=null&&!this.session.isValid()){
+				this.session=null;
+			}
+			
+			if(this.session!=null){
+				return this.session.getSession();
+			}
+		}
+		
+		if(this.session!=null){
+			return this.session.getSession();
+		}else{
+			return null;
+		}
+	}
+	
 	@Override
 	public Principal getUserPrincipal() {
 		// TODO Auto-generated method stub

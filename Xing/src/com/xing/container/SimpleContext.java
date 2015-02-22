@@ -15,6 +15,7 @@ import com.xing.pipeline.Pipeline;
 import com.xing.pipeline.SimpleContextValve;
 import com.xing.pipeline.SimplePipeline;
 import com.xing.pipeline.Valve;
+import com.xing.session.Manager;
 
 public class SimpleContext implements Context, Lifecycle, Pipeline {
 
@@ -27,6 +28,7 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 	private Logger logger;
 	private String path;
 	private String docBase;
+	private Manager manager;
 	
 	public SimpleContext(){
 		this.lifecycleSupport=new LifecycleSupport(this);
@@ -49,7 +51,7 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 	@Override
 	public void addChild(Container child) {
 		Container[] children=new Container[this.children.length+1];
-		System.arraycopy(children, 0, this.children, 0, this.children.length);
+		System.arraycopy(this.children, 0, children, 0, this.children.length);
 		children[this.children.length]=child;
 		
 		this.children=children;
@@ -251,6 +253,11 @@ public class SimpleContext implements Context, Lifecycle, Pipeline {
 
 	public String getDocBase() {
 		return docBase;
+	}
+
+	@Override
+	public Manager getManager() {
+		return this.manager;
 	}
 
 }

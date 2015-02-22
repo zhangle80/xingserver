@@ -41,12 +41,16 @@ public final class Bootstrap {
 		context.setLoader(loader);
 				
 		Wrapper wrapper=new SimpleWrapper();
-		wrapper.setServletClass("ThirdServlet");
+		wrapper.setServletClass("com.xing.servlets.FirstServlet");
 		
 		Valve requestDateTimeValve=new RequestDateTimeValve();
-		((Pipeline)wrapper).addValve(requestDateTimeValve);
-			
+		((Pipeline)wrapper).addValve(requestDateTimeValve);			
 		context.addWrapper(wrapper);
+		
+		wrapper=new SimpleWrapper();
+		wrapper.setServletClass("ThirdServlet");
+		context.addWrapper(wrapper);
+		
 		((Lifecycle)context).start();
 		
 		connector.setContainer(context);
