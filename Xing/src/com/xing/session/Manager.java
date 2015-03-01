@@ -1,9 +1,9 @@
 package com.xing.session;
 
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 import com.xing.container.Container;
-import com.xing.logger.PropertyChangeListener;
 
 public interface Manager {
 	
@@ -85,7 +85,7 @@ public interface Manager {
 	 */
 	public void remove(Session session);
 	
-	public void removePropertyChangeListener();
+	public void removePropertyChangeListener(PropertyChangeListener listener);
 	
 	/**
 	 * 将SESSION数据持久化
